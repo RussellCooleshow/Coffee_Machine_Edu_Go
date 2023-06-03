@@ -109,17 +109,21 @@ func requestAction(availWater, availMilk, availCoffeeBeans, availCups, availMone
 			*availWater -= 250
 			*availCoffeeBeans -= 16
 			*availMoney += 4
+			*availCups -= 1
 		} else if response == "2" {
 			*availWater -= 350
 			*availMilk -= 75
 			*availCoffeeBeans -= 20
 			*availMoney += 7
+			*availCups -= 1
 
 		} else if response == "3" {
 			*availWater -= 200
 			*availMilk -= 100
 			*availCoffeeBeans -= 12
 			*availMoney += 6
+			*availCups -= 1
+
 		}
 
 	}
