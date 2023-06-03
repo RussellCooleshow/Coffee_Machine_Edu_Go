@@ -4,8 +4,17 @@ import (
 	"fmt"
 )
 
+var (
+	availWater       = 400
+	availMilk        = 540
+	availCoffeeBeans = 120
+	availCups        = 9
+	availMoney       = 550
+)
+
 func main() {
 	// write your code here
+	//Can this block be done better?
 	/*	processStart()
 		grinding()
 		boilingWater()
@@ -26,49 +35,111 @@ func main() {
 		fmt.Printf("%d g of coffee beans\n", coffeeBeans) */
 
 	availableResource()
+	requestAction()
+	availableResource()
 }
 
 func availableResource() {
-	var availWater int
-	var availMilk int
-	var availCoffeeBeans int
-	var cupsNeeded int
-	fmt.Println("Write how many ml of water the coffee machine has:")
-	fmt.Scan(&availWater)
-	fmt.Println("Write how many ml of milk the coffee machine has:")
-	fmt.Scan(&availMilk)
-	fmt.Println("Write how many grams of coffee beans the coffee machine has:")
-	fmt.Scan(&availCoffeeBeans)
-	fmt.Println("Write how many cups of coffee you will need:")
-	fmt.Scan(&cupsNeeded)
 
-	canMake := true
+	fmt.Println("The coffee machine has:")
+	fmt.Printf("%d ml of water\n", availWater)
+	fmt.Printf("%d ml of milk\n", availMilk)
+	fmt.Printf("%d g of coffee beans\n", availCoffeeBeans)
+	fmt.Printf("%d disposable cups\n", availCups)
+	fmt.Printf("$%d of money \n", availMoney)
 
-	maxCupsWater := availWater / 200
-	maxCupsMilk := availMilk / 50
-	maxCupsCoffeeBeans := availCoffeeBeans / 15
+	//Can I put the  block below into separate function?
+	/*	fmt.Println("Write how many ml of water the coffee machine has:")
+			fmt.Scan(&availWater)
+			fmt.Println("Write how many ml of milk the coffee machine has:")
+			fmt.Scan(&availMilk)
+			fmt.Println("Write how many grams of coffee beans the coffee machine has:")
+			fmt.Scan(&availCoffeeBeans)
+			fmt.Println("Write how many cups of coffee you will need:")
+			fmt.Scan(&cupsNeeded)
 
-	maxCups := maxCupsWater
-	if maxCupsMilk < maxCups {
-		maxCups = maxCupsMilk
-	}
-	if maxCupsCoffeeBeans < maxCups {
-		maxCups = maxCupsCoffeeBeans
-	}
+			canMake := true
 
-	if maxCups < cupsNeeded {
-		canMake = false
-	}
+			maxCupsWater := availWater / 200
+			maxCupsMilk := availMilk / 50
+			maxCupsCoffeeBeans := availCoffeeBeans / 15
 
-	if canMake {
-		if maxCups > cupsNeeded {
-			fmt.Printf("Yes, I can make that amount of coffee (and even %d more than that)\n", maxCups-cupsNeeded)
-		} else {
-			fmt.Println("Yes, I can make that amount of coffee")
+		maxCups := maxCupsWater
+		if maxCupsMilk < maxCups {
+			maxCups = maxCupsMilk
 		}
-	} else {
-		fmt.Printf("No, I can make only %d cups of coffee\n", maxCups)
+		if maxCupsCoffeeBeans < maxCups {
+			maxCups = maxCupsCoffeeBeans
+		}
+
+		if maxCups < cupsNeeded {
+			canMake = false
+		}
+
+		if canMake {
+			if maxCups > cupsNeeded {
+				fmt.Printf("Yes, I can make that amount of coffee (and even %d more than that)\n", maxCups-cupsNeeded)
+			} else {
+				fmt.Println("Yes, I can make that amount of coffee")
+			}
+		} else {
+			fmt.Printf("No, I can make only %d cups of coffee\n", maxCups)
+		}
+	*/
+}
+
+func requestAction() (int, int, int, int, int) {
+	var action string
+	fmt.Println("Write action (buy, fill, take):")
+	fmt.Scan(&action)
+
+	if action == "buy" {
+		var response string
+		fmt.Println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:")
+		fmt.Scan(&response)
+		if response == "espresso" {
+			availWater -= 250
+			availCoffeeBeans -= 16
+			availMoney += 4
+		} else if response == "latte" {
+			availWater -= 350
+			availMilk -= 75
+			availCoffeeBeans -= 20
+			availMoney += 7
+
+		} else {
+			availWater -= 200
+			availMilk -= 100
+			availCoffeeBeans -= 12
+			availMoney += 6
+		}
+
 	}
+
+	if action == "fill" {
+		var addWater, addMilk, addCoffeeBeans, addCups int
+		fmt.Println("Write how many ml of water you want to add:")
+		fmt.Scan(&addWater)
+		fmt.Println("Write how many ml of milk you want to add:")
+		fmt.Scan(&addMilk)
+		fmt.Println("Write how many grams of coffee beans you want to add:")
+		fmt.Scan(&addCoffeeBeans)
+		fmt.Println("Write how many disposable cups you want to add:")
+		fmt.Scan(&addCups)
+
+		availWater += addWater
+		availMilk += addMilk
+		availCoffeeBeans += addCoffeeBeans
+		availCups += addCups
+	}
+
+	if action == "take" {
+		fmt.Printf("I gave you $%d\n", availMoney)
+		availMoney -= availMoney
+
+	}
+
+	return availWater, availMilk, availCoffeeBeans, availCups, availMoney
 
 }
 func waterCalculation(cupsAmount int) int {
