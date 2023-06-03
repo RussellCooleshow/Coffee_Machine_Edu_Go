@@ -42,7 +42,7 @@ func main() {
 	// ...
 
 	availableResource(&availWater, &availMilk, &availCoffeeBeans, &availCups, &availMoney)
-	requestAction()
+	requestAction(&availWater, &availMilk, &availCoffeeBeans, &availCups, &availMoney)
 	availableResource(&availWater, &availMilk, &availCoffeeBeans, &availCups, &availMoney)
 
 }
@@ -50,11 +50,11 @@ func main() {
 func availableResource(availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
 
 	fmt.Println("The coffee machine has:")
-	fmt.Printf("%d ml of water\n", availWater)
-	fmt.Printf("%d ml of milk\n", availMilk)
-	fmt.Printf("%d g of coffee beans\n", availCoffeeBeans)
-	fmt.Printf("%d disposable cups\n", availCups)
-	fmt.Printf("$%d of money \n", availMoney)
+	fmt.Printf("%d ml of water\n", *availWater)
+	fmt.Printf("%d ml of milk\n", *availMilk)
+	fmt.Printf("%d g of coffee beans\n", *availCoffeeBeans)
+	fmt.Printf("%d disposable cups\n", *availCups)
+	fmt.Printf("$%d of money \n", *availMoney)
 
 	//Can I put the  block below into separate function?
 	/*	fmt.Println("Write how many ml of water the coffee machine has:")
@@ -96,7 +96,7 @@ func availableResource(availWater, availMilk, availCoffeeBeans, availCups, avail
 	*/
 }
 
-func requestAction() (availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
+func requestAction(availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
 	var action string
 	fmt.Println("Write action (buy, fill, take):")
 	fmt.Scan(&action)
@@ -146,8 +146,6 @@ func requestAction() (availWater, availMilk, availCoffeeBeans, availCups, availM
 		*availMoney = 0
 
 	}
-
-	return availWater, availMilk, availCoffeeBeans, availCups, availMoney
 
 }
 func waterCalculation(cupsAmount int) int {
