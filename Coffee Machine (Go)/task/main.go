@@ -4,13 +4,13 @@ import (
 	"fmt"
 )
 
-var (
+/* var (
 	availWater       = 400
 	availMilk        = 540
 	availCoffeeBeans = 120
 	availCups        = 9
 	availMoney       = 550
-)
+) */
 
 func main() {
 	// write your code here
@@ -33,13 +33,21 @@ func main() {
 		fmt.Printf("%d ml of water\n", water)
 		fmt.Printf("%d ml of milk\n", milk)
 		fmt.Printf("%d g of coffee beans\n", coffeeBeans) */
+	availWater := 400
+	availMilk := 540
+	availCoffeeBeans := 120
+	availCups := 9
+	availMoney := 550
 
-	availableResource()
+	// ...
+
+	availableResource(&availWater, &availMilk, &availCoffeeBeans, &availCups, &availMoney)
 	requestAction()
-	availableResource()
+	availableResource(&availWater, &availMilk, &availCoffeeBeans, &availCups, &availMoney)
+
 }
 
-func availableResource() {
+func availableResource(availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
 
 	fmt.Println("The coffee machine has:")
 	fmt.Printf("%d ml of water\n", availWater)
@@ -88,7 +96,7 @@ func availableResource() {
 	*/
 }
 
-func requestAction() (int, int, int, int, int) {
+func requestAction() (availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
 	var action string
 	fmt.Println("Write action (buy, fill, take):")
 	fmt.Scan(&action)
@@ -97,21 +105,21 @@ func requestAction() (int, int, int, int, int) {
 		var response string
 		fmt.Println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino:")
 		fmt.Scan(&response)
-		if response == "espresso" {
-			availWater -= 250
-			availCoffeeBeans -= 16
-			availMoney += 4
-		} else if response == "latte" {
-			availWater -= 350
-			availMilk -= 75
-			availCoffeeBeans -= 20
-			availMoney += 7
+		if response == "1" {
+			*availWater -= 250
+			*availCoffeeBeans -= 16
+			*availMoney += 4
+		} else if response == "2" {
+			*availWater -= 350
+			*availMilk -= 75
+			*availCoffeeBeans -= 20
+			*availMoney += 7
 
-		} else {
-			availWater -= 200
-			availMilk -= 100
-			availCoffeeBeans -= 12
-			availMoney += 6
+		} else if response == "3" {
+			*availWater -= 200
+			*availMilk -= 100
+			*availCoffeeBeans -= 12
+			*availMoney += 6
 		}
 
 	}
@@ -127,15 +135,15 @@ func requestAction() (int, int, int, int, int) {
 		fmt.Println("Write how many disposable cups you want to add:")
 		fmt.Scan(&addCups)
 
-		availWater += addWater
-		availMilk += addMilk
-		availCoffeeBeans += addCoffeeBeans
-		availCups += addCups
+		*availWater += addWater
+		*availMilk += addMilk
+		*availCoffeeBeans += addCoffeeBeans
+		*availCups += addCups
 	}
 
 	if action == "take" {
-		fmt.Printf("I gave you $%d\n", availMoney)
-		availMoney -= availMoney
+		fmt.Printf("I gave you $%d\n", *availMoney)
+		*availMoney = 0
 
 	}
 
