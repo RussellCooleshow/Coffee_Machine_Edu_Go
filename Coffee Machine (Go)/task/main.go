@@ -4,14 +4,24 @@ import (
 	"fmt"
 )
 
+type CoffeeMachine struct {
+	availWater       int
+	availMilk        int
+	availCoffeeBeans int
+	availCups        int
+	availMoney       int
+}
+
 func main() {
 
-	availWater := 400
-	availMilk := 540
-	availCoffeeBeans := 120
-	availCups := 9
-	availMoney := 550
+	coffeeMachine := CoffeeMachine{
 
+		availWater:       400,
+		availMilk:        540,
+		availCoffeeBeans: 120,
+		availCups:        9,
+		availMoney:       550,
+	}
 	// ...
 
 	for {
@@ -22,97 +32,95 @@ func main() {
 
 		switch action {
 		case "buy":
-			buyCoffee(&availWater, &availMilk, &availCoffeeBeans, &availCups, &availMoney)
+			coffeeMachine.buyCoffee()
 		case "fill":
-			fillResources(&availWater, &availMilk, &availCoffeeBeans, &availCups)
+			coffeeMachine.fillResources()
 		case "take":
-			takeMoney(&availMoney)
+			coffeeMachine.takeMoney()
 		case "remaining":
-			availableResource(&availWater, &availMilk, &availCoffeeBeans, &availCups, &availMoney)
+			coffeeMachine.availResources()
 		case "exit":
 			return
 		default:
 			fmt.Println("Invalid action. Please try again.")
 		}
-
 	}
 
 }
 
-func availableResource(availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
+func (cm *CoffeeMachine) availResources() {
 
 	fmt.Println("The coffee machine has:")
-	fmt.Printf("%d ml of water\n", *availWater)
-	fmt.Printf("%d ml of milk\n", *availMilk)
-	fmt.Printf("%d g of coffee beans\n", *availCoffeeBeans)
-	fmt.Printf("%d disposable cups\n", *availCups)
-	fmt.Printf("$%d of money \n", *availMoney)
-	fmt.Println()
-
+	fmt.Printf("%d ml of water\n", cm.availWater)
+	fmt.Printf("%d ml of milk\n", cm.availMilk)
+	fmt.Printf("%d g of coffee beans\n", cm.availCoffeeBeans)
+	fmt.Printf("%d disposable cups\n", cm.availCups)
+	fmt.Printf("$%d of money\n", cm.availMoney)
 }
 
-func buyCoffee(availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
+func (cm *CoffeeMachine) buyCoffee() {
+
 	var response string
 	fmt.Println("What do you want to buy? 1 - espresso, 2 - latte, 3 - cappuccino, back - to main menu:")
 	fmt.Scan(&response)
 
-	if response == "1" {
-		makeCoffee(250, 0, 16, 4, availWater, availMilk, availCoffeeBeans, availCups, availMoney)
-	} else if response == "2" {
-		makeCoffee(350, 75, 20, 7, availWater, availMilk, availCoffeeBeans, availCups, availMoney)
-	} else if response == "3" {
-		makeCoffee(200, 100, 12, 6, availWater, availMilk, availCoffeeBeans, availCups, availMoney)
-	} else if response == "back" {
+	switch response {
+	case "1":
+		cm.makeCoffee(250, 0, 16, 4)
+	case "2":
+		cm.makeCoffee(350, 75, 20, 7)
+	case "3":
+		cm.makeCoffee(200, 100, 12, 6)
+	case "back":
 		return
+	default:
+		fmt.Println("Invalid choice! Try again.")
+
+	}
+
+}
+
+func (cm *CoffeeMachine) makeCoffee(water, milk, coffeeBeans, cost int) {
+	if cm.hasEnoughResources(water, milk, coffeeBeans, 1) {
+		fmt.Println("I have enough resources, making you a coffee!")
+		cm.availWater -= water
+		cm.availMilk -= milk
+		cm.availCoffeeBeans -= coffeeBeans
+		cm.availMoney += cost
+		cm.availCups--
 	} else {
-		fmt.Println("Invalid option. Please try again.")
+		fmt.Println("Sorry, not enough resources to make coffee!")
 	}
 }
 
-func makeCoffee(water, milk, coffeeBeans, cost int, availWater, availMilk, availCoffeeBeans, availCups, availMoney *int) {
-	if *availWater < water {
-		fmt.Println("Sorry, not enough water!")
-		return
-	}
-	if *availMilk < milk {
-		fmt.Println("Sorry, not enough milk!")
-		return
-	}
-	if *availCoffeeBeans < coffeeBeans {
-		fmt.Println("Sorry, not enough coffee beans!")
-		return
-	}
-	if *availCups < 1 {
-		fmt.Println("Sorry, not enough disposable cups!")
-		return
-	}
-
-	fmt.Println("I have enough resources, making you a coffee!")
-	*availWater -= water
-	*availMilk -= milk
-	*availCoffeeBeans -= coffeeBeans
-	*availMoney += cost
-	*availCups -= 1
-}
-
-func fillResources(availWater, availMilk, availCoffeeBeans, availCups *int) {
-	var addWater, addMilk, addCoffeeBeans, addCups int
+func (cm *CoffeeMachine) fillResources() {
 	fmt.Println("Write how many ml of water you want to add:")
-	fmt.Scan(&addWater)
-	fmt.Println("Write how many ml of milk you want to add:")
-	fmt.Scan(&addMilk)
-	fmt.Println("Write how many grams of coffee beans you want to add:")
-	fmt.Scan(&addCoffeeBeans)
-	fmt.Println("Write how many disposable cups you want to add:")
-	fmt.Scan(&addCups)
+	var water int
+	fmt.Scan(&water)
 
-	*availWater += addWater
-	*availMilk += addMilk
-	*availCoffeeBeans += addCoffeeBeans
-	*availCups += addCups
+	fmt.Println("Write how many ml of milk you want to add:")
+	var milk int
+	fmt.Scan(&milk)
+
+	fmt.Println("Write how many grams of coffee beans you want to add:")
+	var coffeeBeans int
+	fmt.Scan(&coffeeBeans)
+
+	fmt.Println("Write how many disposable cups you want to add:")
+	var cups int
+	fmt.Scan(&cups)
+
+	cm.availWater += water
+	cm.availMilk += milk
+	cm.availCoffeeBeans += coffeeBeans
+	cm.availCups += cups
 }
 
-func takeMoney(availMoney *int) {
-	fmt.Printf("I gave you $%d\n", *availMoney)
-	*availMoney = 0
+func (cm *CoffeeMachine) takeMoney() {
+	fmt.Printf("I gave you $%d\n", cm.availMoney)
+	cm.availMoney = 0
+}
+
+func (cm *CoffeeMachine) hasEnoughResources(water, milk, coffeeBeans, cups int) bool {
+	return cm.availWater >= water && cm.availMilk >= milk && cm.availCoffeeBeans >= coffeeBeans && cm.availCups >= cups
 }
